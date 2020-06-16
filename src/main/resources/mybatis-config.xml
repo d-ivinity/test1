@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <properties resource="jdbc.properties"/>
+
+    <!--mybatis映射级别 三个
+       1. 默认的  PARTIAL 局部映射  基本映射 与数据库一一对应的实体类
+       不能映射 结果集  比如  一个实体类中的 对象   或者 集合
+       2. NONE 不映射
+       3. FULL 全局映射 可以映射自定义的结果集  比如  我们Stu对象中的Grade
+   -->
+
+
+    <settings>
+        <setting name="autoMappingBehavior" value="FULL"/>
+    </settings>
+
+
+    <!--这个 环境  父标签   项目的环境   比如 生产 测试 开发  -->
+    <typeAliases>
+        <!-- <typeAlias type="com.entity.Stu" alias="abcd"></typeAlias>-->
+        <!--表示此包下 所有的类 默认以类名 为别名  Stu-->
+        <package name="com.yq.entity"/>
+    </typeAliases>
+
+
+    <environments default="pro">
+        <environment id="pro">
+            <transactionManager type="jdbc"></transactionManager>
+            <dataSource type="com.yq.util.MyDruidDataSourceFactory">
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+                <property name="jdbcUrl" value="${url}"/>
+                <property name="driverClass" value="${driver}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--使得mapper.xml映射文件得以加载-->
+    <mappers>
+        <mapper resource="com/yq/dao/StuDaoMapper.xml"></mapper>
+        <mapper resource="com/yq/dao/GradeDaoMapper.xml"></mapper>
+    </mappers>
+
+
+</configuration>
