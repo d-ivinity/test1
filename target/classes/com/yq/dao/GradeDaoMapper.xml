@@ -13,4 +13,5 @@
         select * from stu,grade where sid = gid
     </select>
 
+
 </mapper>

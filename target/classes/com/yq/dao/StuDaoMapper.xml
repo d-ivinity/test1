@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间 表示当前mapper文件对应的接口类   -->
+<mapper namespace="com.yq.dao.StuDao">
+    <resultMap id="stuGrade" type="com.yq.entity.Stu">
+        <id column="sid" property="sid"></id>
+        <result column="sname" property="sname"></result>
+        <association property="grade" javaType="com.yq.entity.Grade">
+            <id column="gid" property="gid"></id>
+            <result column="gname" property="gname"></result>
+        </association>
+    </resultMap>
+    <select id="getStuAndGrade" resultMap="stuGrade">
+        select * from stu,grade where sid = gid and stu.sid = #{sid}
+    </select>
+
+
+    <sql id="stu">
+    select sid,sname,sage
+    from stu
+    </sql>
+
+    <select id="getAllStu" resultType="com.yq.entity.Stu">
+        <include refid="stu"></include>
+    </select>
+
+    <select id="stuById" resultType="com.yq.entity.Stu">
+        <include refid="stu"></include>
+        <where>
+            <if test="sid != null">
+                sid = #{sid}
+            </if>
+        </where>
+    </select>
+
+    <select id="stuByName" resultType="com.yq.entity.Stu">
+        <include refid="stu"></include>
+        <where>
+            <if test="sname != null">
+                sname = #{sname}
+            </if>
+        </where>
+    </select>
+
+    <select id="stuByAge" resultType="com.yq.entity.Stu">
+        <include refid="stu"></include>
+        <where>
+            <if test="sage != null">
+                sage = #{sage}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateStu">
+        update stu
+        <trim prefix="set" suffixOverrides=",">
+            <if test="sname != null">
+                sname = #{sname},
+            </if>
+            <if test="sage != null">
+                sage = #{sage},
+            </if>
+        </trim>
+        <where>
+            <if test="sid != null">
+                sid = #{sid}
+            </if>
+        </where>
+    </update>
+
+
+    <select id="getStuById" resultType="com.yq.entity.Stu">
+        <include refid="stu"></include>
+        where sid in
+        <foreach collection="list" open="(" close=")" separator="," item="sid">
+            #{sid}
+        </foreach>
+    </select>
+</mapper>
